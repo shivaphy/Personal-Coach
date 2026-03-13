@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shiva's Personal Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#fdf8f0; --cream2:#f5ede0; --cream3:#ede0cc;
+  --ink:#1c160f; --ink2:#3d3526; --ink3:#6b5d4a;
+  --gold:#c47f17; --gold2:#e8a020; --gold-light:#fef3dc;
+  --teal:#1a7a6e; --teal2:#22a090; --teal-light:#e6f7f5;
+  --rust:#b5402a; --rust-light:#fdf0ec;
+  --green:#2e7d52; --green-light:#eaf4ee;
+  --blue:#2455a0; --blue-light:#edf2fb;
+  --purple:#6040a0; --purple-light:#f2eefb;
+  --border:#ddd4c0; --border2:#c8bba5;
+  --shadow:rgba(60,40,10,0.10);
+  --shadow2:rgba(60,40,10,0.18);
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;}
+
+/* ════════════════════════════════
+   LOGIN
+════════════════════════════════ */
+#loginScreen{
+  flex-direction:column;align-items:center;justify-content:center;padding:2rem;
+  background:
+    radial-gradient(ellipse at 15% 15%,rgba(196,127,23,0.12),transparent 55%),
+    radial-gradient(ellipse at 85% 85%,rgba(26,122,110,0.10),transparent 55%),
+    var(--cream);
+}
+.login-card{
+  background:white;border:1.5px solid var(--border);border-radius:18px;
+  padding:2.8rem 2.2rem;width:100%;max-width:440px;
+  box-shadow:0 12px 50px var(--shadow2);animation:slideUp .5s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.login-logo{text-align:center;margin-bottom:2rem;}
+.login-logo h1{font-family:'Playfair Display',serif;font-size:2.1rem;color:var(--gold);letter-spacing:0.03em;line-height:1.1;}
+.login-logo h1 span{font-style:italic;}
+.login-logo p{color:var(--ink3);font-size:0.82rem;margin-top:0.4rem;letter-spacing:0.1em;text-transform:uppercase;}
+.crest{font-size:2.2rem;margin-bottom:0.5rem;display:block;}
+.role-tabs{display:flex;gap:0.4rem;margin-bottom:1.6rem;background:var(--cream2);border-radius:9px;padding:4px;}
+.role-tab{flex:1;padding:.55rem;border:none;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:.05em;transition:all .2s;background:transparent;color:var(--ink3);}
+.role-tab.active{background:var(--gold);color:white;box-shadow:0 2px 8px rgba(196,127,23,.3);}
+.form-group{margin-bottom:.9rem;}
+.form-group label{display:block;font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);margin-bottom:.35rem;font-weight:700;}
+.form-group input{width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.93rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.form-group input:focus{border-color:var(--gold);background:white;}
+.form-group input::placeholder{color:var(--ink3);opacity:.6;}
+.btn-login{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:white;border:none;border-radius:9px;padding:.82rem;font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .2s;margin-top:.4rem;box-shadow:0 4px 16px rgba(196,127,23,.25);}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(196,127,23,.35);}
+.login-hint{text-align:center;margin-top:1rem;font-size:.78rem;color:var(--ink3);line-height:1.7;background:var(--cream2);border-radius:8px;padding:.7rem;}
+.login-hint b{color:var(--gold);}
+.login-err{background:var(--rust-light);color:var(--rust);border:1px solid #f0c0b0;border-radius:7px;padding:.5rem .9rem;font-size:.82rem;margin-bottom:1rem;display:none;}
+
+/* ════════════════════════════════
+   SHARED HEADER
+════════════════════════════════ */
+.app-header{
+  display:flex;align-items:center;gap:.9rem;padding:.85rem 1.8rem;
+  border-bottom:2px solid var(--border);background:white;
+  box-shadow:0 2px 16px var(--shadow);flex-shrink:0;position:sticky;top:0;z-index:100;
+}
+.app-header h1{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);letter-spacing:.02em;}
+.hdr-badge{border-radius:20px;padding:.22rem .8rem;font-size:.72rem;font-weight:700;letter-spacing:.08em;}
+.badge-fac{background:var(--teal-light);border:1px solid var(--teal2);color:var(--teal);}
+.badge-stu{background:var(--gold-light);border:1px solid var(--gold2);color:var(--gold);}
+.ml-auto{margin-left:auto;}
+.flex-row{display:flex;align-items:center;gap:.6rem;}
+.btn-sm{background:var(--cream2);border:1.5px solid var(--border);color:var(--ink3);border-radius:7px;padding:.38rem .85rem;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-sm:hover{border-color:var(--rust);color:var(--rust);}
+.chip{border-radius:20px;padding:.22rem .8rem;font-size:.75rem;font-weight:600;}
+.chip-teal{background:var(--teal-light);border:1px solid var(--teal2);color:var(--teal);}
+.chip-gold{background:var(--gold-light);border:1px solid var(--gold2);color:var(--gold);}
+.chip-blue{background:var(--blue-light);border:1px solid var(--blue);color:var(--blue);}
+
+/* ════════════════════════════════
+   FACULTY SCREEN
+════════════════════════════════ */
+#facultyScreen{flex-direction:column;background:var(--cream);}
+.fac-tabs-bar{display:flex;gap:0;border-bottom:2px solid var(--border);background:white;padding:0 1.8rem;overflow-x:auto;}
+.fac-tab{padding:.8rem 1.3rem;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;color:var(--ink3);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;}
+.fac-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.fac-tab:hover:not(.active){color:var(--ink);}
+.fac-pane{display:none;padding:1.8rem;flex:1;max-width:1100px;margin:0 auto;width:100%;}
+.fac-pane.active{display:block;}
+
+/* Panel cards */
+.panel{background:white;border:1.5px solid var(--border);border-radius:var(--r);padding:1.4rem;box-shadow:0 2px 12px var(--shadow);}
+.panel+.panel{margin-top:1.2rem;}
+.panel-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--ink);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+
+/* Upload zone */
+.upload-zone{border:2px dashed var(--border2);border-radius:10px;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s;color:var(--ink3);background:var(--cream);}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--gold);color:var(--gold);background:var(--gold-light);}
+.upload-icon{font-size:2.2rem;display:block;margin-bottom:.5rem;}
+.upload-zone p{font-size:.87rem;line-height:1.5;}
+.upload-zone small{font-size:.75rem;opacity:.6;}
+.doc-ready{background:var(--green-light);border:1px solid var(--green);border-radius:8px;padding:.65rem 1rem;font-size:.83rem;color:var(--green);display:none;margin-top:.8rem;align-items:center;gap:.4rem;}
+.doc-ready .dname{font-weight:700;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Form controls */
+.fac-input,.fac-select,.fac-textarea{width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:.65rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.fac-input:focus,.fac-select:focus,.fac-textarea:focus{border-color:var(--gold);background:white;}
+.fac-textarea{resize:vertical;min-height:80px;}
+.fac-label{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:.35rem;font-weight:700;}
+.form-row{margin-bottom:.9rem;}
+
+/* Buttons */
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:white;border:none;border-radius:9px;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.03em;box-shadow:0 3px 12px rgba(196,127,23,.22);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(196,127,23,.32);}
+.btn-primary:disabled{opacity:.45;transform:none;cursor:not-allowed;}
+.btn-teal{background:linear-gradient(135deg,var(--teal),var(--teal2));color:white;border:none;border-radius:9px;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.03em;}
+.btn-teal:hover{opacity:.9;transform:translateY(-1px);}
+.btn-blue{background:linear-gradient(135deg,var(--blue),#3465c0);color:white;border:none;border-radius:9px;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-blue:hover{opacity:.9;transform:translateY(-1px);}
+.btn-w100{width:100%;}
+
+/* Student list */
+.stu-list{display:flex;flex-direction:column;gap:.5rem;max-height:280px;overflow-y:auto;}
+.stu-card{background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:.7rem 1rem;display:flex;align-items:center;gap:.7rem;}
+.stu-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--teal2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:white;flex-shrink:0;}
+.stu-info{flex:1;}
+.stu-name{font-weight:600;font-size:.88rem;color:var(--ink);}
+.stu-meta{font-size:.74rem;color:var(--ink3);}
+.stu-badge{font-size:.7rem;padding:.18rem .55rem;border-radius:20px;font-weight:700;}
+.s-active{background:var(--green-light);color:var(--green);}
+.s-idle{background:var(--cream2);color:var(--ink3);}
+
+/* Rubric table */
+.rubric-table{width:100%;border-collapse:collapse;font-size:.83rem;}
+.rubric-table th{background:var(--cream2);padding:.55rem .7rem;text-align:left;font-weight:700;color:var(--ink3);border:1px solid var(--border);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;}
+.rubric-table td{padding:.5rem .7rem;border:1px solid var(--border);vertical-align:top;color:var(--ink);}
+.rubric-table tr:nth-child(even) td{background:var(--cream);}
+.score-pill{display:inline-block;background:var(--gold-light);border:1px solid var(--gold2);color:var(--gold);border-radius:20px;padding:.12rem .55rem;font-size:.7rem;font-weight:700;}
+
+/* Session status */
+.sess-status{font-size:.8rem;color:var(--ink3);margin-top:.6rem;text-align:center;}
+.sess-status.on{color:var(--green);font-weight:600;}
+
+/* Virtual lab */
+.vlab-row{display:flex;gap:.7rem;margin-bottom:.7rem;}
+.vlab-input{flex:1;background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:.65rem 1rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.vlab-input:focus{border-color:var(--teal2);}
+.vlab-links{display:flex;flex-direction:column;gap:.5rem;max-height:200px;overflow-y:auto;}
+.vlab-link-item{display:flex;align-items:center;gap:.7rem;background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:.6rem 1rem;}
+.vlab-link-item a{font-size:.85rem;font-weight:600;color:var(--teal);text-decoration:none;flex:1;}
+.vlab-link-item a:hover{color:var(--teal2);text-decoration:underline;}
+.vlab-link-item .vl-topic{font-size:.75rem;color:var(--ink3);}
+.vlab-delete{background:none;border:none;color:var(--rust);cursor:pointer;font-size:1rem;padding:.1rem .3rem;}
+
+/* Generated output box */
+.gen-output{background:var(--cream);border:1.5px solid var(--border);border-radius:10px;padding:1.2rem;margin-top:1rem;font-size:.87rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;max-height:450px;overflow-y:auto;display:none;}
+.gen-output.visible{display:block;}
+
+/* Spinner */
+.spinner{display:none;text-align:center;padding:1.2rem;color:var(--ink3);font-size:.88rem;}
+.spinner.show{display:block;}
+.spin-dots{display:inline-flex;gap:4px;margin-right:.5rem;}
+.spin-dots span{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 1.2s infinite;display:inline-block;}
+.spin-dots span:nth-child(2){animation-delay:.2s;}
+.spin-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+
+/* ════════════════════════════════
+   STUDENT / COACH SCREEN
+════════════════════════════════ */
+#studentScreen{flex-direction:column;height:100vh;overflow:hidden;background:var(--cream);}
+.coach-body{display:grid;grid-template-columns:1fr 290px;flex:1;overflow:hidden;}
+
+/* Chat */
+.chat-col{display:flex;flex-direction:column;overflow:hidden;border-right:2px solid var(--border);}
+.messages{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth;background:var(--cream);}
+.messages::-webkit-scrollbar{width:4px;}
+.messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+.msg{display:flex;gap:.7rem;animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{flex-direction:row-reverse;}
+.av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;}
+.av-coach{background:linear-gradient(135deg,var(--gold),var(--gold2));color:white;font-family:'Playfair Display',serif;}
+.av-user{background:var(--cream2);border:1.5px solid var(--border2);color:var(--ink3);}
+.bubble{max-width:78%;padding:.85rem 1.1rem;border-radius:13px;font-size:.91rem;line-height:1.65;}
+.msg.coach .bubble{background:white;border:1.5px solid var(--border);border-bottom-left-radius:3px;box-shadow:0 2px 10px var(--shadow);}
+.msg.user .bubble{background:linear-gradient(135deg,#1a4a6e,#1e5882);color:white;border-bottom-right-radius:3px;}
+.msg-tag{display:inline-block;font-size:.67rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:.12rem .5rem;border-radius:20px;margin-bottom:.32rem;}
+.tq{background:var(--gold-light);color:var(--gold);}
+.ti{background:var(--green-light);color:var(--green);}
+.tc{background:var(--rust-light);color:var(--rust);}
+.tintro{background:var(--teal-light);color:var(--teal);}
+.tgrade{background:var(--purple-light);color:var(--purple);}
+
+.typing-dots{display:flex;gap:4px;align-items:center;padding:.2rem 0;}
+.typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--gold);opacity:.5;animation:blink 1.2s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+
+/* Input */
+.input-bar{padding:.9rem 1.2rem;border-top:2px solid var(--border);background:white;flex-shrink:0;}
+.input-row{display:flex;gap:.6rem;align-items:flex-end;}
+.ans-input{flex:1;background:var(--cream);border:1.5px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--ink);outline:none;resize:none;min-height:44px;max-height:110px;transition:border-color .2s;line-height:1.5;}
+.ans-input:focus{border-color:var(--gold);background:white;}
+.ans-input:disabled{opacity:.4;cursor:not-allowed;}
+.btn-send{background:var(--gold);color:white;border:none;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0;transition:all .2s;font-weight:700;}
+.btn-send:hover{background:var(--gold2);}
+.btn-send:disabled{opacity:.3;cursor:not-allowed;}
+.input-tools{display:flex;gap:.5rem;margin-top:.5rem;align-items:center;}
+.btn-upload-assign{background:var(--purple-light);border:1.5px solid var(--purple);color:var(--purple);border-radius:7px;padding:.3rem .8rem;font-size:.77rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-upload-assign:hover{background:var(--purple);color:white;}
+.input-hint{font-size:.72rem;color:var(--ink3);margin-left:auto;}
+
+/* Sidebar */
+.sidebar{display:flex;flex-direction:column;gap:0;overflow-y:auto;background:white;border-left:0;}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);}
+.s-panel{border-bottom:1.5px solid var(--border);padding:1rem;}
+.s-panel-title{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:.8rem;display:flex;align-items:center;gap:.35rem;}
+
+/* Stat boxes */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+.stat-box{background:var(--cream);border:1.5px solid var(--border);border-radius:8px;padding:.6rem .5rem;text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);line-height:1;}
+.stat-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-top:.2rem;}
+
+/* Bars */
+.perf-items{display:flex;flex-direction:column;gap:.65rem;}
+.perf-lbl{font-size:.78rem;display:flex;justify-content:space-between;margin-bottom:.25rem;color:var(--ink);}
+.perf-lbl span{color:var(--ink3);font-size:.72rem;}
+.perf-bar{height:6px;background:var(--cream2);border-radius:3px;overflow:hidden;}
+.perf-fill{height:100%;border-radius:3px;transition:width .9s cubic-bezier(.4,0,.2,1);}
+.fs{background:linear-gradient(90deg,var(--teal),var(--green));}
+.fd{background:linear-gradient(90deg,var(--gold),#e07b00);}
+.fe{background:linear-gradient(90deg,var(--blue),var(--purple));}
+
+/* SW */
+.sw-list{display:flex;flex-direction:column;gap:.35rem;}
+.sw-item{display:flex;gap:.45rem;font-size:.78rem;line-height:1.4;padding:.38rem .55rem;border-radius:6px;}
+.sw-item.str{background:var(--green-light);color:var(--green);}
+.sw-item.wk{background:var(--rust-light);color:var(--rust);}
+.sw-dot{flex-shrink:0;margin-top:1px;}
+.sw-empty{font-size:.76rem;color:var(--ink3);font-style:italic;text-align:center;padding:.3rem 0;}
+
+/* Grade card */
+.grade-card{background:var(--cream);border:1.5px solid var(--border);border-radius:10px;padding:.9rem;margin-top:.5rem;display:none;}
+.grade-card.show{display:block;}
+.grade-big{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;text-align:center;}
+.grade-a{color:var(--green);}
+.grade-b{color:var(--teal);}
+.grade-c{color:var(--gold);}
+.grade-d{color:var(--rust);}
+.grade-row{display:flex;justify-content:space-between;font-size:.77rem;padding:.22rem 0;border-bottom:1px solid var(--border);}
+.grade-row:last-child{border:none;}
+.grade-row b{color:var(--ink);}
+
+/* Vlab sidebar */
+.vl-list-side{display:flex;flex-direction:column;gap:.4rem;}
+.vl-item{background:var(--cream);border:1.5px solid var(--teal-light);border-radius:7px;padding:.45rem .7rem;}
+.vl-item a{font-size:.78rem;font-weight:600;color:var(--teal);text-decoration:none;}
+.vl-item a:hover{text-decoration:underline;}
+.vl-item .vl-t{font-size:.7rem;color:var(--ink3);display:block;margin-top:.1rem;}
+
+.empty-chat{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;color:var(--ink3);gap:.9rem;}
+.empty-chat .icon{font-size:3.5rem;opacity:.2;}
+.empty-chat p{font-size:.88rem;max-width:270px;line-height:1.65;}
+
+/* quiz styles inside gen-output */
+.quiz-q{font-weight:700;color:var(--ink);margin-top:1rem;}
+.quiz-opt{margin:.2rem 0 .2rem 1rem;color:var(--ink2);}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,22,15,.45);display:none;align-items:center;justify-content:center;z-index:1000;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border:1.5px solid var(--border);border-radius:14px;padding:2rem;max-width:520px;width:100%;box-shadow:0 20px 60px var(--shadow2);animation:slideUp .3s ease;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--ink);margin-bottom:1.2rem;}
+.modal-close{float:right;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--ink3);margin-top:-.3rem;}
+
+/* Assign preview */
+.assign-preview{background:var(--purple-light);border:1.5px solid var(--purple);border-radius:8px;padding:.6rem .9rem;font-size:.8rem;color:var(--purple);display:none;margin-top:.5rem;align-items:center;gap:.4rem;}
+.assign-preview.show{display:flex;}
+
+/* Responsive */
+@media(max-width:700px){
+  .coach-body{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .grid2{grid-template-columns:1fr;}
+  .grid3{grid-template-columns:1fr;}
+  .fac-tabs-bar{padding:0 .5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     LOGIN
+════════════════════════════════ -->
+<div class="screen active" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="crest">🎓</span>
+      <h1>Shiva's <span>Personal</span> Coach</h1>
+      <p>Socratic · Adaptive · Personalized</p>
+    </div>
+    <div class="role-tabs">
+      <button class="role-tab active" onclick="setRole('student')">Student Login</button>
+      <button class="role-tab" onclick="setRole('faculty')">Faculty Login</button>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <div id="stuFields">
+      <div class="form-group"><label>Full Name</label><input id="sName" type="text" placeholder="Your full name"/></div>
+      <div class="form-group"><label>Roll Number</label><input id="sRoll" type="text" placeholder="e.g. CS2024001"/></div>
+      <div class="form-group"><label>Password</label><input id="sPass" type="password" placeholder="Password"/></div>
+    </div>
+    <div id="facFields" style="display:none">
+      <div class="form-group"><label>Faculty ID</label><input id="fId" type="text" placeholder="e.g. FAC001"/></div>
+      <div class="form-group"><label>Password</label><input id="fPass" type="password" placeholder="Faculty password"/></div>
+    </div>
+    <button class="btn-login" onclick="doLogin()">Sign In →</button>
+    <div class="login-hint">
+      Students: Any name · Any roll number · Password <b>student123</b><br>
+      Faculty: ID <b>FAC001</b> · Password <b>faculty123</b>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     FACULTY SCREEN
+════════════════════════════════ -->
+<div class="screen" id="facultyScreen" style="flex-direction:column;">
+  <div class="app-header">
+    <h1>🎓 Shiva's Personal Coach</h1>
+    <span class="hdr-badge badge-fac">FACULTY PORTAL</span>
+    <div class="ml-auto flex-row">
+      <span class="chip chip-gold" id="facName">Dr. Shiva</span>
+      <button class="btn-sm" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+  <div class="fac-tabs-bar">
+    <button class="fac-tab active" onclick="facTab('session')">📋 Session Setup</button>
+    <button class="fac-tab" onclick="facTab('rubric')">📐 Grading Rubrics</button>
+    <button class="fac-tab" onclick="facTab('vlab')">🔬 Virtual Lab Links</button>
+    <button class="fac-tab" onclick="facTab('lesson')">📅 Lesson Plan</button>
+    <button class="fac-tab" onclick="facTab('quiz')">📝 Quiz Generator</button>
+    <button class="fac-tab" onclick="facTab('students')">👥 Students</button>
+  </div>
+
+  <!-- SESSION SETUP -->
+  <div class="fac-pane active" id="pane-session">
+    <div class="grid2">
+      <div>
+        <div class="panel">
+          <div class="panel-title">📄 Upload Study Document</div>
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('docFile').click()"
+            ondragover="e=>{e.preventDefault();this.classList.add('drag');}"
+            ondragleave="e=>{this.classList.remove('drag');}"
+            ondrop="dropDoc(event)">
+            <span class="upload-icon">⬆️</span>
+            <p><b>Click or drag & drop</b></p>
+            <small>PDF · TXT · DOCX — max 3 MB</small>
+          </div>
+          <input type="file" id="docFile" accept=".pdf,.txt,.doc,.docx" style="display:none" onchange="loadDoc(event)"/>
+          <div class="doc-ready" id="docReady"><span>✅</span><span>Document:</span><span class="dname" id="docReadyName"></span></div>
+        </div>
+
+        <div class="panel" style="margin-top:1.2rem;">
+          <div class="panel-title">⚙️ Session Controls</div>
+          <div class="form-row"><label class="fac-label">Session Topic / Module</label><input class="fac-input" id="sessTopic" placeholder="e.g. Unit 2: Photosynthesis"/></div>
+          <div class="form-row"><label class="fac-label">Active Rubric</label>
+            <select class="fac-select" id="sessRubric">
+              <option value="">— No grading (chat only) —</option>
+              <option value="assignment">Assignment Rubric</option>
+              <option value="presentation">Presentation Rubric</option>
+              <option value="lab">Lab Report Rubric</option>
+            </select>
+          </div>
+          <button class="btn-primary btn-w100" onclick="activateSession()">Activate Student Session ↗</button>
+          <p class="sess-status" id="sessStatusTxt">No active session</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="panel-title">📊 Session Log</div>
+          <div style="font-size:.83rem;color:var(--ink3);line-height:1.8;" id="sessLog">Activate a session to see the log here.</div>
+        </div>
+        <div class="panel" style="margin-top:1.2rem;">
+          <div class="panel-title">🔬 Active Virtual Lab Links</div>
+          <div class="vl-list-side" id="vlabSideList"><div style="font-size:.8rem;color:var(--ink3);font-style:italic;">No lab links added yet.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUBRIC -->
+  <div class="fac-pane" id="pane-rubric">
+    <div class="panel">
+      <div class="panel-title">📐 Grading Rubrics</div>
+      <p style="font-size:.85rem;color:var(--ink3);margin-bottom:1rem;">These rubrics are used when grading student assignment uploads. Select "Assignment Rubric" in Session Setup to apply.</p>
+      <table class="rubric-table" style="margin-bottom:1.5rem;">
+        <thead><tr><th>Criterion</th><th>Excellent (4)</th><th>Good (3)</th><th>Satisfactory (2)</th><th>Needs Work (1)</th><th>Weight</th></tr></thead>
+        <tbody id="rubricBody">
+          <tr><td><b>Conceptual Understanding</b></td><td>Deep, accurate grasp of all concepts</td><td>Mostly accurate, minor gaps</td><td>Basic understanding, some errors</td><td>Major misconceptions</td><td><span class="score-pill">30%</span></td></tr>
+          <tr><td><b>Critical Thinking</b></td><td>Insightful analysis, original reasoning</td><td>Good analysis with minor gaps</td><td>Surface-level analysis</td><td>Little evidence of reasoning</td><td><span class="score-pill">25%</span></td></tr>
+          <tr><td><b>Application</b></td><td>Flawlessly applies concepts to new contexts</td><td>Applies well with minor errors</td><td>Partial application</td><td>Unable to apply concepts</td><td><span class="score-pill">20%</span></td></tr>
+          <tr><td><b>Communication</b></td><td>Clear, organized, well-written</td><td>Mostly clear, minor issues</td><td>Some clarity issues</td><td>Difficult to follow</td><td><span class="score-pill">15%</span></td></tr>
+          <tr><td><b>Completeness</b></td><td>All parts addressed thoroughly</td><td>Most parts addressed</td><td>Some parts missing</td><td>Major sections missing</td><td><span class="score-pill">10%</span></td></tr>
+        </tbody>
+      </table>
+      <div class="panel-title" style="margin-top:1.5rem;">🎨 Customize Rubric</div>
+      <div class="grid2">
+        <div class="form-row"><label class="fac-label">Criterion Name</label><input class="fac-input" id="rCrit" placeholder="e.g. Originality"/></div>
+        <div class="form-row"><label class="fac-label">Weight (%)</label><input class="fac-input" id="rWeight" type="number" placeholder="e.g. 20" min="1" max="100"/></div>
+      </div>
+      <div class="form-row"><label class="fac-label">Description / Excellent Descriptor</label><input class="fac-input" id="rDesc" placeholder="What does excellence look like?"/></div>
+      <button class="btn-primary" onclick="addRubricRow()">+ Add Criterion</button>
+    </div>
+  </div>
+
+  <!-- VIRTUAL LAB -->
+  <div class="fac-pane" id="pane-vlab">
+    <div class="panel">
+      <div class="panel-title">🔬 Virtual Lab Links</div>
+      <p style="font-size:.85rem;color:var(--ink3);margin-bottom:1rem;">Add virtual lab URLs. Students will see these in their sidebar during sessions.</p>
+      <div class="form-row"><label class="fac-label">Topic / Lab Name</label><input class="fac-input" id="vlTopic" placeholder="e.g. Cell Division Simulation"/></div>
+      <div class="vlab-row">
+        <input class="vlab-input" id="vlUrl" placeholder="https://virtuallab.example.com/cell-division" onkeydown="if(event.key==='Enter')addVlab()"/>
+        <button class="btn-teal" onclick="addVlab()">+ Add Lab</button>
+      </div>
+      <div class="vlab-links" id="vlabLinks">
+        <div style="font-size:.83rem;color:var(--ink3);font-style:italic;padding:.5rem;">No virtual labs added yet. Add your first link above.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LESSON PLAN -->
+  <div class="fac-pane" id="pane-lesson">
+    <div class="panel">
+      <div class="panel-title">📅 AI Lesson Plan Generator</div>
+      <div class="grid3">
+        <div class="form-row"><label class="fac-label">Module / Topic</label><input class="fac-input" id="lpModule" placeholder="e.g. Photosynthesis"/></div>
+        <div class="form-row"><label class="fac-label">Total Hours</label><input class="fac-input" id="lpHours" type="number" placeholder="e.g. 6" min="1" max="60"/></div>
+        <div class="form-row"><label class="fac-label">Hours per Session</label><input class="fac-input" id="lpPerSess" type="number" placeholder="e.g. 1" min="0.5" max="8" step="0.5"/></div>
+      </div>
+      <div class="form-row"><label class="fac-label">Level / Grade</label>
+        <select class="fac-select" id="lpLevel">
+          <option>Undergraduate (Year 1)</option><option>Undergraduate (Year 2)</option>
+          <option>Undergraduate (Year 3)</option><option>Postgraduate</option>
+          <option>School (Grade 9-10)</option><option>School (Grade 11-12)</option>
+        </select>
+      </div>
+      <div class="form-row"><label class="fac-label">Learning Objectives (optional)</label><textarea class="fac-textarea" id="lpObjectives" placeholder="What should students achieve by end of module?"></textarea></div>
+      <button class="btn-primary" onclick="generateLesson()">✨ Generate Lesson Plan</button>
+      <div class="spinner" id="lpSpinner"><span class="spin-dots"><span></span><span></span><span></span></span>Generating your lesson plan…</div>
+      <div class="gen-output" id="lpOutput"></div>
+      <div style="margin-top:.7rem;display:none;" id="lpActions">
+        <button class="btn-sm" onclick="copyOutput('lpOutput')">📋 Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="fac-pane" id="pane-quiz">
+    <div class="panel">
+      <div class="panel-title">📝 AI Quiz Generator</div>
+      <div class="grid2">
+        <div class="form-row"><label class="fac-label">Module / Lecture</label><input class="fac-input" id="qModule" placeholder="e.g. Lecture 3: Mitosis"/></div>
+        <div class="form-row"><label class="fac-label">Number of Questions</label><input class="fac-input" id="qCount" type="number" placeholder="e.g. 10" min="3" max="30" value="10"/></div>
+      </div>
+      <div class="grid2">
+        <div class="form-row"><label class="fac-label">Question Types</label>
+          <select class="fac-select" id="qType">
+            <option value="mcq">Multiple Choice (MCQ)</option>
+            <option value="short">Short Answer</option>
+            <option value="truefalse">True / False</option>
+            <option value="mixed">Mixed (MCQ + Short Answer)</option>
+          </select>
+        </div>
+        <div class="form-row"><label class="fac-label">Difficulty Level</label>
+          <select class="fac-select" id="qDiff">
+            <option>Easy</option><option selected>Medium</option><option>Hard</option><option>Mixed</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row"><label class="fac-label">Additional Context / Topics to Focus</label><textarea class="fac-textarea" id="qContext" placeholder="Optional: paste key points, learning outcomes, or paste document text to base quiz on…"></textarea></div>
+      <button class="btn-blue" onclick="generateQuiz()">⚡ Generate Quiz</button>
+      <div class="spinner" id="qSpinner"><span class="spin-dots"><span></span><span></span><span></span></span>Crafting your quiz…</div>
+      <div class="gen-output" id="qOutput"></div>
+      <div style="margin-top:.7rem;display:none;" id="qActions">
+        <button class="btn-sm" onclick="copyOutput('qOutput')">📋 Copy</button>
+        <button class="btn-sm" style="margin-left:.4rem;" onclick="generateQuiz()">🔄 Regenerate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDENTS -->
+  <div class="fac-pane" id="pane-students">
+    <div class="panel">
+      <div class="panel-title">👥 Registered Students</div>
+      <div class="stu-list" id="stuList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     STUDENT / COACH SCREEN
+════════════════════════════════ -->
+<div class="screen" id="studentScreen" style="flex-direction:column;height:100vh;overflow:hidden;">
+  <div class="app-header">
+    <h1>🎓 Shiva's Personal Coach</h1>
+    <span class="chip chip-teal" id="hdrTopic">Awaiting session…</span>
+    <div class="ml-auto flex-row">
+      <span class="chip chip-gold" id="hdrStudent">Student</span>
+      <button class="btn-sm" onclick="logout()">Exit</button>
+    </div>
+  </div>
+
+  <div class="coach-body" style="overflow:hidden;">
+    <!-- Chat -->
+    <div class="chat-col">
+      <div class="messages" id="messages">
+        <div class="empty-chat" id="emptyChat">
+          <div class="icon">Σ</div>
+          <p>Your faculty will activate the session shortly. Once active, your personalized Socratic coaching will begin here.</p>
+        </div>
+      </div>
+      <div class="input-bar">
+        <div class="input-row">
+          <textarea class="ans-input" id="ansInput" placeholder="Type your answer…" rows="1" disabled
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="btn-send" id="sendBtn" onclick="sendAnswer()" disabled>↑</button>
+        </div>
+        <div class="input-tools">
+          <button class="btn-upload-assign" onclick="document.getElementById('assignFile').click()">📎 Upload Assignment</button>
+          <input type="file" id="assignFile" accept=".pdf,.txt,.doc,.docx" style="display:none" onchange="uploadAssignment(event)"/>
+          <div class="assign-preview" id="assignPreview"><span>📄</span><span id="assignName"></span></div>
+          <span class="input-hint" id="inputHint">Session not started</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Doc -->
+      <div class="s-panel">
+        <div class="s-panel-title">📄 Study Document</div>
+        <div style="font-size:.78rem;" id="sideDocInfo">
+          <span style="color:var(--ink3);font-style:italic;">Awaiting document…</span>
+        </div>
+      </div>
+      <!-- Stats -->
+      <div class="s-panel">
+        <div class="s-panel-title">📊 Session</div>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="stat-num" id="stEx">0</div><div class="stat-lbl">Exchanges</div></div>
+          <div class="stat-box"><div class="stat-num" id="stMastery">—</div><div class="stat-lbl">Mastery</div></div>
+        </div>
+      </div>
+      <!-- Performance -->
+      <div class="s-panel">
+        <div class="s-panel-title">🎯 Performance</div>
+        <div class="perf-items">
+          <div><div class="perf-lbl">Conceptual Strength<span id="pStr">0%</span></div><div class="perf-bar"><div class="perf-fill fs" id="bStr" style="width:0%"></div></div></div>
+          <div><div class="perf-lbl">Depth of Reasoning<span id="pDep">0%</span></div><div class="perf-bar"><div class="perf-fill fd" id="bDep" style="width:0%"></div></div></div>
+          <div><div class="perf-lbl">Engagement<span id="pEng">0%</span></div><div class="perf-bar"><div class="perf-fill fe" id="bEng" style="width:0%"></div></div></div>
+        </div>
+      </div>
+      <!-- Strengths -->
+      <div class="s-panel">
+        <div class="s-panel-title">✦ Strengths</div>
+        <div class="sw-list" id="strList"><div class="sw-empty">Emerging soon…</div></div>
+      </div>
+      <!-- Weaknesses -->
+      <div class="s-panel">
+        <div class="s-panel-title">◈ Areas to Grow</div>
+        <div class="sw-list" id="wkList"><div class="sw-empty">Emerging soon…</div></div>
+      </div>
+      <!-- Grade -->
+      <div class="s-panel">
+        <div class="s-panel-title">📐 Assignment Grade</div>
+        <div class="grade-card" id="gradeCard">
+          <div class="grade-big" id="gradeLetter">—</div>
+          <div style="text-align:center;font-size:.8rem;color:var(--ink3);margin-bottom:.6rem;" id="gradeScore"></div>
+          <div id="gradeBreakdown"></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--ink3);font-style:italic;" id="gradeEmpty">Upload an assignment to receive AI grading.</div>
+      </div>
+      <!-- Virtual Labs -->
+      <div class="s-panel">
+        <div class="s-panel-title">🔬 Virtual Labs</div>
+        <div class="vl-list-side" id="sideVlabList"><div style="font-size:.78rem;color:var(--ink3);font-style:italic;">No labs linked yet.</div></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+const STUDENTS=[
+  {name:"Priya Sharma",roll:"CS2024001",status:"idle"},
+  {name:"Arjun Mehta",roll:"CS2024002",status:"idle"},
+  {name:"Ananya Rao",roll:"CS2024003",status:"idle"},
+  {name:"Karthik Reddy",roll:"CS2024004",status:"idle"},
+  {name:"Divya Nair",roll:"CS2024005",status:"idle"},
+];
+const FAC={id:"FAC001",pass:"faculty123"};
+const STUPASS="student123";
+
+let currentRole='student',currentUser=null;
+let sessionActive=false,sessionTopic="",sessionRubric="";
+let docText="",docName="";
+let assignText="",assignName="";
+let conversation=[],exchanges=0;
+let allStrengths=[],allWeaknesses=[];
+let vlabLinks=[];
+
+// ══════════════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════════════
+function setRole(r){
+  currentRole=r;
+  document.querySelectorAll('.role-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&r==='student')||(i===1&&r==='faculty')));
+  document.getElementById('stuFields').style.display=r==='student'?'block':'none';
+  document.getElementById('facFields').style.display=r==='faculty'?'block':'none';
+  document.getElementById('loginErr').style.display='none';
+}
+function showErr(m){const e=document.getElementById('loginErr');e.textContent=m;e.style.display='block';}
+function doLogin(){
+  document.getElementById('loginErr').style.display='none';
+  if(currentRole==='faculty'){
+    const id=document.getElementById('fId').value.trim();
+    const pass=document.getElementById('fPass').value;
+    if(id===FAC.id&&pass===FAC.pass){currentUser={role:'faculty',name:'Dr. Shiva'};showFaculty();}
+    else showErr('Invalid Faculty ID or password.');
+  } else {
+    const name=document.getElementById('sName').value.trim();
+    const roll=document.getElementById('sRoll').value.trim();
+    const pass=document.getElementById('sPass').value;
+    if(!name){showErr('Enter your full name.');return;}
+    if(!roll){showErr('Enter your roll number.');return;}
+    if(pass!==STUPASS){showErr('Wrong password. Hint: student123');return;}
+    currentUser={role:'student',name,roll};
+    const s=STUDENTS.find(x=>x.roll===roll);if(s)s.status='active';
+    showStudent();
+  }
+}
+function logout(){
+  if(currentUser?.roll){const s=STUDENTS.find(x=>x.roll===currentUser.roll);if(s)s.status='idle';}
+  currentUser=null;conversation=[];exchanges=0;allStrengths=[];allWeaknesses=[];assignText='';assignName='';
+  show('loginScreen');
+}
+
+// ══════════════════════════════════════════════════════
+//  SCREEN ROUTING
+// ══════════════════════════════════════════════════════
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+  const el=document.getElementById(id);el.style.display='flex';el.classList.add('active');
+}
+function showFaculty(){show('facultyScreen');renderStuList();}
+function showStudent(){
+  show('studentScreen');
+  document.getElementById('hdrStudent').textContent=currentUser.name+' · '+currentUser.roll;
+  refreshStudentView();
+}
+
+// ══════════════════════════════════════════════════════
+//  FACULTY TABS
+// ══════════════════════════════════════════════════════
+function facTab(name){
+  document.querySelectorAll('.fac-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.fac-pane').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('pane-'+name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════
+//  DOCUMENT UPLOAD (Faculty)
+// ══════════════════════════════════════════════════════
+function dropDoc(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)readDoc(f);}
+function loadDoc(e){const f=e.target.files[0];if(f)readDoc(f);}
+function readDoc(file){
+  if(file.size>3*1024*1024){alert('File too large. Max 3MB.');return;}
+  docName=file.name;
+  const r=new FileReader();
+  r.onload=ev=>{
+    docText=ev.target.result;
+    if(docText.length>10000)docText=docText.slice(0,10000)+'\n[...truncated...]';
+    document.getElementById('docReadyName').textContent=docName;
+    document.getElementById('docReady').style.display='flex';
+    updateSideDoc();
+  };
+  r.readAsText(file);
+}
+
+// ══════════════════════════════════════════════════════
+//  VIRTUAL LAB LINKS
+// ══════════════════════════════════════════════════════
+function addVlab(){
+  const topic=document.getElementById('vlTopic').value.trim();
+  const url=document.getElementById('vlUrl').value.trim();
+  if(!url){alert('Please enter a URL.');return;}
+  if(!url.startsWith('http')){alert('URL must start with http:// or https://');return;}
+  vlabLinks.push({topic:topic||'Virtual Lab',url});
+  document.getElementById('vlTopic').value='';
+  document.getElementById('vlUrl').value='';
+  renderVlabLinks();
+  renderVlabSide();
+}
+function deleteVlab(i){vlabLinks.splice(i,1);renderVlabLinks();renderVlabSide();}
+function renderVlabLinks(){
+  const el=document.getElementById('vlabLinks');
+  if(!vlabLinks.length){el.innerHTML='<div style="font-size:.83rem;color:var(--ink3);font-style:italic;padding:.5rem;">No virtual labs added yet.</div>';return;}
+  el.innerHTML=vlabLinks.map((v,i)=>`
+    <div class="vlab-link-item">
+      <div style="flex:1;"><a href="${esc(v.url)}" target="_blank">🔗 ${esc(v.topic)}</a><div class="vl-topic">${esc(v.url)}</div></div>
+      <button class="vlab-delete" onclick="deleteVlab(${i})" title="Remove">✕</button>
+    </div>`).join('');
+}
+function renderVlabSide(){
+  const tpl=(id)=>{
+    const el=document.getElementById(id);
+    if(!vlabLinks.length){el.innerHTML='<div style="font-size:.78rem;color:var(--ink3);font-style:italic;">No labs linked yet.</div>';return;}
+    el.innerHTML=vlabLinks.map(v=>`<div class="vl-item"><a href="${esc(v.url)}" target="_blank">🔗 ${esc(v.topic)}</a><span class="vl-t">${esc(v.url)}</span></div>`).join('');
+  };
+  tpl('vlabSideList');
+  tpl('sideVlabList');
+}
+
+// ══════════════════════════════════════════════════════
+//  RUBRIC
+// ══════════════════════════════════════════════════════
+function addRubricRow(){
+  const crit=document.getElementById('rCrit').value.trim();
+  const weight=document.getElementById('rWeight').value.trim();
+  const desc=document.getElementById('rDesc').value.trim();
+  if(!crit){alert('Enter a criterion name.');return;}
+  const tbody=document.getElementById('rubricBody');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><b>${esc(crit)}</b></td><td>${esc(desc)}</td><td>—</td><td>—</td><td>—</td><td><span class="score-pill">${esc(weight)||'—'}%</span></td>`;
+  tbody.appendChild(tr);
+  document.getElementById('rCrit').value='';document.getElementById('rWeight').value='';document.getElementById('rDesc').value='';
+}
+
+// ══════════════════════════════════════════════════════
+//  SESSION ACTIVATION
+// ══════════════════════════════════════════════════════
+function activateSession(){
+  const topic=document.getElementById('sessTopic').value.trim();
+  if(!topic){alert('Please enter a session topic.');return;}
+  sessionTopic=topic;
+  sessionRubric=document.getElementById('sessRubric').value;
+  sessionActive=true;
+  const now=new Date().toLocaleTimeString();
+  document.getElementById('sessStatusTxt').textContent=`✅ Session active since ${now}`;
+  document.getElementById('sessStatusTxt').className='sess-status on';
+  document.getElementById('sessLog').innerHTML=`<b>Topic:</b> ${esc(topic)}<br><b>Rubric:</b> ${sessionRubric||'None'}<br><b>Document:</b> ${docName||'None'}<br><b>Started:</b> ${now}<br><b>Virtual Labs:</b> ${vlabLinks.length}`;
+  renderStuList();
+  renderVlabSide();
+}
+
+function renderStuList(){
+  document.getElementById('stuList').innerHTML=STUDENTS.map(s=>`
+    <div class="stu-card">
+      <div class="stu-av">${s.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div class="stu-info"><div class="stu-name">${esc(s.name)}</div><div class="stu-meta">${esc(s.roll)}</div></div>
+      <span class="stu-badge ${s.status==='active'?'s-active':'s-idle'}">${s.status==='active'?'Active':'Idle'}</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+//  AI GENERATORS (Faculty)
+// ══════════════════════════════════════════════════════
+async function generateLesson(){
+  const module=document.getElementById('lpModule').value.trim();
+  const hours=document.getElementById('lpHours').value.trim();
+  const perSess=document.getElementById('lpPerSess').value.trim();
+  const level=document.getElementById('lpLevel').value;
+  const obj=document.getElementById('lpObjectives').value.trim();
+  if(!module||!hours||!perSess){alert('Please fill Module, Total Hours, and Hours per Session.');return;}
+  const sessions=Math.ceil(parseFloat(hours)/parseFloat(perSess));
+  const prompt=`Create a detailed lesson plan for a module titled "${module}" at ${level} level.
+Total Duration: ${hours} hours | Session Duration: ${perSess} hour(s) each | Total Sessions: ${sessions}
+${obj?'Learning Objectives: '+obj:''}
+${docText?'Base the lesson plan on this document:\n'+docText.slice(0,3000):''}
+
+Format as a structured lesson plan with:
+1. Module Overview & Learning Objectives
+2. Session-by-Session Breakdown (Session 1, 2, ... ${sessions}) with: Topic, Activities, Teaching Methods, Assessment, Materials
+3. Assessment Strategy
+4. Recommended Resources`;
+  await runGenAI('lpSpinner','lpOutput','lpActions',prompt);
+}
+
+async function generateQuiz(){
+  const module=document.getElementById('qModule').value.trim();
+  const count=document.getElementById('qCount').value.trim()||'10';
+  const type=document.getElementById('qType').value;
+  const diff=document.getElementById('qDiff').value;
+  const ctx=document.getElementById('qContext').value.trim();
+  if(!module){alert('Please enter the module/lecture name.');return;}
+  const typeDesc={mcq:'Multiple Choice (4 options each, mark correct answer)',short:'Short Answer',truefalse:'True/False',mixed:'Mixed (60% MCQ with 4 options, 40% Short Answer)'};
+  const prompt=`Generate a ${diff}-difficulty quiz for: "${module}"
+Question Type: ${typeDesc[type]}
+Number of Questions: ${count}
+${ctx?'Context/Focus areas:\n'+ctx:''}
+${docText?'Use this document as the source:\n'+docText.slice(0,3000):''}
+
+Format each question clearly:
+- For MCQ: Q#. [Question] (A) ... (B) ... (C) ... (D) ... ✓ Answer: [letter]
+- For Short Answer: Q#. [Question] | Model Answer: [answer]
+- For T/F: Q#. [Statement] | Answer: True/False | Explanation: [brief]
+Include a difficulty rating (Easy/Medium/Hard) for each question.`;
+  await runGenAI('qSpinner','qOutput','qActions',prompt);
+}
+
+async function runGenAI(spinnerId,outputId,actionsId,prompt){
+  document.getElementById(spinnerId).classList.add('show');
+  document.getElementById(outputId).classList.remove('visible');
+  document.getElementById(actionsId).style.display='none';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:2000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'No response received.';
+    document.getElementById(outputId).textContent=text;
+    document.getElementById(outputId).classList.add('visible');
+    document.getElementById(actionsId).style.display='block';
+  }catch(err){
+    document.getElementById(outputId).textContent='Error: '+err.message;
+    document.getElementById(outputId).classList.add('visible');
+  }
+  document.getElementById(spinnerId).classList.remove('show');
+}
+
+function copyOutput(id){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>alert('Copied to clipboard!'));
+}
+
+// ══════════════════════════════════════════════════════
+//  STUDENT VIEW
+// ══════════════════════════════════════════════════════
+function refreshStudentView(){
+  const topicEl=document.getElementById('hdrTopic');
+  const ansInput=document.getElementById('ansInput');
+  const sendBtn=document.getElementById('sendBtn');
+  const hintEl=document.getElementById('inputHint');
+  updateSideDoc();
+  renderVlabSide();
+  if(sessionActive&&sessionTopic){
+    topicEl.textContent=sessionTopic;
+    ansInput.disabled=false; sendBtn.disabled=false;
+    hintEl.textContent='Enter ↵ to send · Shift+Enter for new line';
+    if(conversation.length===0) startCoach();
+  } else {
+    topicEl.textContent='Awaiting session…';
+    hintEl.textContent='Session not started';
+  }
+}
+
+function updateSideDoc(){
+  const el=document.getElementById('sideDocInfo');
+  if(docName) el.innerHTML=`<span style="color:var(--teal);font-weight:600;">📘 ${esc(docName)}</span>`;
+  else el.innerHTML='<span style="color:var(--ink3);font-style:italic;">No document loaded.</span>';
+}
+
+// ══════════════════════════════════════════════════════
+//  ASSIGNMENT UPLOAD & GRADING
+// ══════════════════════════════════════════════════════
+function uploadAssignment(e){
+  const file=e.target.files[0]; if(!file) return;
+  if(file.size>3*1024*1024){alert('Max 3MB.');return;}
+  assignName=file.name;
+  const r=new FileReader();
+  r.onload=async ev=>{
+    assignText=ev.target.result;
+    if(assignText.length>8000) assignText=assignText.slice(0,8000)+'\n[truncated]';
+    document.getElementById('assignName').textContent=assignName;
+    document.getElementById('assignPreview').classList.add('show');
+    // Auto-grade if rubric is set
+    if(sessionRubric){
+      appendCoachMsg({tag:'grade',message:`📎 I've received your assignment "${esc(assignName)}". Let me grade it using the ${sessionRubric} rubric right now…`});
+      await gradeAssignment();
+    } else {
+      appendCoachMsg({tag:'insight',message:`📎 I've received your assignment "${esc(assignName)}". Your faculty hasn't set a grading rubric for this session, but I can still discuss it with you! What aspect would you like to explore?`});
+    }
+  };
+  r.readAsText(file);
+}
+
+async function gradeAssignment(){
+  const rubricDescs={
+    assignment:'Criterion weights: Conceptual Understanding (30%), Critical Thinking (25%), Application (20%), Communication (15%), Completeness (10%). Score each 1-4.',
+    presentation:'Criterion weights: Content (30%), Delivery (25%), Visual Aids (20%), Engagement (15%), Time Management (10%). Score each 1-4.',
+    lab:'Criterion weights: Methodology (30%), Data Analysis (25%), Conclusions (20%), Scientific Writing (15%), Safety & Procedure (10%). Score each 1-4.'
+  };
+  const rubric=rubricDescs[sessionRubric]||rubricDescs.assignment;
+  const prompt=`You are an academic grader. Grade the following student assignment on topic "${sessionTopic}".
+
+RUBRIC: ${rubric}
+
+ASSIGNMENT TEXT:
+${assignText}
+
+${docText?'REFERENCE DOCUMENT (base grading on alignment with this):\n'+docText.slice(0,2000):''}
+
+Respond ONLY with valid JSON:
+{
+  "letterGrade": "A+"|"A"|"B+"|"B"|"C+"|"C"|"D"|"F",
+  "percentage": 0-100,
+  "breakdown": [
+    {"criterion":"Conceptual Understanding","score":1-4,"max":4,"comment":"brief comment"},
+    {"criterion":"Critical Thinking","score":1-4,"max":4,"comment":"brief comment"},
+    {"criterion":"Application","score":1-4,"max":4,"comment":"brief comment"},
+    {"criterion":"Communication","score":1-4,"max":4,"comment":"brief comment"},
+    {"criterion":"Completeness","score":1-4,"max":4,"comment":"brief comment"}
+  ],
+  "overallFeedback": "2-3 sentence personalized feedback for ${currentUser?.name||'the student'}",
+  "topStrength": "one-line strength",
+  "topImprovement": "one-line improvement area"
+}`;
+
+  showTyping();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const raw=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
+    let g;
+    try{g=JSON.parse(raw);}catch{const m=raw.match(/\{[\s\S]*\}/);if(m)g=JSON.parse(m[0]);}
+    hideTyping();
+    if(g) renderGrade(g);
+    else appendCoachMsg({tag:'insight',message:'I reviewed your assignment! Let\'s discuss the key concepts together.'});
+  }catch(err){
+    hideTyping();
+    appendCoachMsg({tag:'insight',message:'I received your assignment. Let\'s talk through the main ideas!'});
+  }
+}
+
+function renderGrade(g){
+  const gradeCard=document.getElementById('gradeCard');
+  const cls=g.letterGrade.startsWith('A')?'grade-a':g.letterGrade.startsWith('B')?'grade-b':g.letterGrade.startsWith('C')?'grade-c':'grade-d';
+  document.getElementById('gradeLetter').className='grade-big '+cls;
+  document.getElementById('gradeLetter').textContent=g.letterGrade;
+  document.getElementById('gradeScore').textContent=g.percentage+'% overall';
+  document.getElementById('gradeBreakdown').innerHTML=(g.breakdown||[]).map(b=>`
+    <div class="grade-row"><b>${esc(b.criterion)}</b><span>${b.score}/${b.max}</span></div>`).join('');
+  gradeCard.classList.add('show');
+  document.getElementById('gradeEmpty').style.display='none';
+  // Also show in chat
+  const msg=`📊 **Assignment Graded!**\n\nGrade: ${g.letterGrade} (${g.percentage}%)\n\n${g.overallFeedback}\n\n✦ Strength: ${g.topStrength}\n◈ Improve: ${g.topImprovement}`;
+  appendCoachMsg({tag:'grade',message:msg});
+}
+
+// ══════════════════════════════════════════════════════
+//  SOCRATIC COACH
+// ══════════════════════════════════════════════════════
+function buildSystem(){
+  return `You are Sōkratēs, a warm, wise Socratic learning coach for Shiva's Personal Coach. You are coaching ${currentUser?.name||'the student'} (Roll: ${currentUser?.roll||''}) on: "${sessionTopic}".
+${docText?`\n=== STUDY DOCUMENT ===\n${docText}\n=== END ===\nBase ALL questions strictly on this document.`:''}
+
+PERSONA: Personal, encouraging, calls student by first name occasionally. Never lectures. Always guides through ONE question.
+RULES: 1) ONE question per response. 2) Reference student's previous answer. 3) If wrong: probe gently. 4) Deepen progressively. 5) Celebrate breakthroughs.
+
+RESPOND ONLY with valid JSON (no markdown fences):
+{"tag":"question"|"insight"|"challenge"|"intro","message":"2-4 sentences coaching voice","assessment":{"strengthScore":0-100,"depthScore":0-100,"engagementScore":0-100,"strengths":["≤8 word strength"],"weaknesses":["≤8 word growth area"],"masteryLabel":"Novice"|"Developing"|"Proficient"|"Advanced"|"Expert"}}`;
+}
+
+async function startCoach(){
+  showTyping();
+  const r=await callClaude(`Start a warm Socratic session on "${sessionTopic}" for ${currentUser?.name}. Tag: intro. All scores 0, arrays empty.`);
+  hideTyping();
+  if(r) renderCoachMsg(r);
+}
+
+async function sendAnswer(){
+  const inp=document.getElementById('ansInput');
+  const text=inp.value.trim(); if(!text) return;
+  inp.value=''; inp.style.height='auto';
+  document.getElementById('sendBtn').disabled=true; inp.disabled=true;
+  appendUserMsg(text); exchanges++;
+  document.getElementById('stEx').textContent=exchanges;
+  conversation.push({role:'user',content:text});
+  showTyping();
+  const r=await callClaude(null);
+  hideTyping();
+  if(r){renderCoachMsg(r);updatePerf(r.assessment);}
+  inp.disabled=false; document.getElementById('sendBtn').disabled=false; inp.focus();
+}
+
+async function callClaude(userOverride){
+  const msgs=[...conversation];
+  if(userOverride) msgs.push({role:'user',content:userOverride});
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,system:buildSystem(),messages:msgs})
+    });
+    if(!res.ok){const t=await res.text();console.error(res.status,t);appendErrMsg('Connection error. Try again.');return null;}
+    const data=await res.json();
+    const raw=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
+    let parsed;
+    try{parsed=JSON.parse(raw);}catch{const m=raw.match(/\{[\s\S]*\}/);if(m)try{parsed=JSON.parse(m[0]);}catch{}}
+    if(!parsed) parsed={tag:'question',message:raw||"Could you share what you understand about this topic so far?",assessment:{strengthScore:0,depthScore:0,engagementScore:0,strengths:[],weaknesses:[],masteryLabel:'—'}};
+    conversation.push({role:'assistant',content:JSON.stringify(parsed)});
+    return parsed;
+  }catch(err){console.error(err);appendErrMsg('Network error.');return null;}
+}
+
+// ══════════════════════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════════════════════
+function showTyping(){
+  const m=document.getElementById('messages');
+  if(document.getElementById('typingEl')) return;
+  const d=document.createElement('div');d.className='msg coach';d.id='typingEl';
+  d.innerHTML=`<div class="av av-coach">Σ</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+function hideTyping(){document.getElementById('typingEl')?.remove();}
+
+const tagMap={question:'● Question',insight:'✦ Insight',challenge:'◈ Challenge',intro:'⌀ Introduction',grade:'📊 Grade'};
+const tagCls={question:'tq',insight:'ti',challenge:'tc',intro:'tintro',grade:'tgrade'};
+
+function renderCoachMsg(data){
+  document.getElementById('emptyChat').style.display='none';
+  const m=document.getElementById('messages');
+  const d=document.createElement('div');d.className='msg coach';
+  d.innerHTML=`<div class="av av-coach">Σ</div><div class="bubble"><div class="msg-tag ${tagCls[data.tag]||'tq'}">${tagMap[data.tag]||data.tag}</div><div>${esc(data.message).replace(/\n/g,'<br>')}</div></div>`;
+  m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function appendCoachMsg(data){renderCoachMsg(data);}
+
+function appendUserMsg(text){
+  document.getElementById('emptyChat').style.display='none';
+  const m=document.getElementById('messages');
+  const init=(currentUser?.name||'U').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const d=document.createElement('div');d.className='msg user';
+  d.innerHTML=`<div class="av av-user">${init}</div><div class="bubble">${esc(text)}</div>`;
+  m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function appendErrMsg(msg){
+  const m=document.getElementById('messages');
+  const d=document.createElement('div');d.className='msg coach';
+  d.innerHTML=`<div class="av av-coach">!</div><div class="bubble" style="color:var(--rust);border-color:var(--rust);">${esc(msg)}</div>`;
+  m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+
+function updatePerf(a){
+  if(!a)return;
+  const s=Math.min(100,a.strengthScore||0),d=Math.min(100,a.depthScore||0),e=Math.min(100,a.engagementScore||0);
+  document.getElementById('bStr').style.width=s+'%';document.getElementById('pStr').textContent=s+'%';
+  document.getElementById('bDep').style.width=d+'%';document.getElementById('pDep').textContent=d+'%';
+  document.getElementById('bEng').style.width=e+'%';document.getElementById('pEng').textContent=e+'%';
+  document.getElementById('stMastery').textContent=a.masteryLabel||'—';
+  (a.strengths||[]).forEach(x=>{if(!allStrengths.includes(x))allStrengths.push(x);});
+  (a.weaknesses||[]).forEach(x=>{if(!allWeaknesses.includes(x))allWeaknesses.push(x);});
+  renderSW('strList',allStrengths.slice(-5),'str','✓');
+  renderSW('wkList',allWeaknesses.slice(-5),'wk','△');
+}
+function renderSW(id,items,cls,dot){
+  const el=document.getElementById(id);
+  if(!items.length){el.innerHTML='<div class="sw-empty">Emerging soon…</div>';return;}
+  el.innerHTML=items.map(i=>`<div class="sw-item ${cls}"><span class="sw-dot">${dot}</span><span>${esc(i)}</span></div>`).join('');
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAnswer();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+
+renderStuList();
+</script>
+</body>
+</html>
