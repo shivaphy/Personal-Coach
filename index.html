@@ -3,118 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shiva's Coach — Unified Platform</title>
+    <title>Shiva's Coach — Advanced Socratic Platform</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --cream: #fdf8f0; --cream2: #f5ede0; --ink: #1c160f; --ink3: #6b5d4a;
-            --gold: #c47f17; --gold2: #e8a020; --teal: #1a7a6e; --rust: #b5402a;
+            --cream: #fdf8f0; --cream2: #f5ede0; --ink: #1c160f;
+            --gold: #c47f17; --teal: #1a7a6e; --rust: #b5402a;
             --border: #ddd4c0; --shadow: rgba(60,40,10,.12);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.6; }
         .hidden { display: none !important; }
-        
-        /* Layout */
-        .header { background: white; padding: 1rem 2rem; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); }
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
         .card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 20px var(--shadow); margin-bottom: 2rem; }
-        
-        /* Forms & Buttons */
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; }
-        button { padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-family: inherit; }
-        .btn-gold { background: var(--gold); color: white; }
-        .btn-teal { background: var(--teal); color: white; }
-        .btn-rust { background: var(--rust); color: white; }
-        .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--ink3); }
-        
-        /* Chat UI */
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; }
+        button { padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; background: var(--gold); color: white; }
         .chat-box { height: 400px; overflow-y: auto; border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem; background: #fafafa; margin-bottom: 1rem; display: flex; flex-direction: column; }
-        .msg { margin-bottom: 1rem; padding: 10px 15px; border-radius: 10px; max-width: 80%; font-size: 0.95rem; line-height: 1.4; }
-        .msg-coach { background: #e6f7f5; color: var(--teal); align-self: flex-start; border-bottom-left-radius: 2px; }
-        .msg-user { background: #fef3dc; color: var(--ink); align-self: flex-end; border-bottom-right-radius: 2px; }
-        
-        /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-        th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+        .msg { margin-bottom: 1rem; padding: 10px 15px; border-radius: 10px; max-width: 85%; font-size: 0.95rem; }
+        .msg-coach { background: #e6f7f5; color: var(--teal); align-self: flex-start; }
+        .msg-user { background: #fef3dc; color: var(--ink); align-self: flex-end; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid var(--border); padding: 10px; }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <h1>🎓 Shiva's Coach</h1>
-        <button class="btn-outline" onclick="showScreen('home')">Home</button>
+    <header style="background: white; padding: 1rem 2rem; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="font-family: 'Playfair Display'; color: var(--gold);">🎓 Shiva's Coach</h1>
+        <button onclick="showScreen('home')" style="background:transparent; color:var(--ink); border:1px solid var(--border)">Home</button>
     </header>
 
-    <div class="container">
-        <div id="screen-home" class="screen">
+    <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem;">
+        
+        <div id="screen-home">
             <div style="text-align: center; padding: 2rem 0;">
-                <h2 style="font-family: 'Playfair Display'; font-size: 2.2rem;">Socratic Physics Coaching</h2>
-                <p style="color:var(--ink3); margin-top: 10px;">Managed by Dr. Shivakumar Math</p>
+                <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Adaptive Socratic Learning</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-                    <div class="card" onclick="showScreen('student-login')" style="cursor:pointer"><h3>🎓 Student Portal</h3></div>
-                    <div class="card" onclick="showScreen('faculty-login')" style="cursor:pointer"><h3>👨‍🏫 Faculty Portal</h3></div>
-                    <div class="card" onclick="showScreen('admin-login')" style="cursor:pointer"><h3>⚙️ Admin Panel</h3></div>
+                    <div class="card" onclick="showScreen('student-login')" style="cursor:pointer"><h3>Student Portal</h3></div>
+                    <div class="card" onclick="showScreen('faculty-login')" style="cursor:pointer"><h3>Faculty Portal</h3></div>
+                    <div class="card" onclick="showScreen('admin-login')" style="cursor:pointer"><h3>Admin Panel</h3></div>
                 </div>
             </div>
         </div>
 
-        <div id="screen-admin-login" class="screen hidden">
+        <div id="screen-admin-login" class="hidden">
             <div class="card" style="max-width: 400px; margin: auto;">
                 <h2>Admin Login</h2>
                 <input type="text" id="adminId" placeholder="Admin ID">
                 <input type="password" id="adminPass" placeholder="Password">
-                <button class="btn-gold" style="width: 100%" onclick="login('admin')">Login</button>
+                <button onclick="login('admin')" style="width:100%">Login</button>
             </div>
         </div>
-        <div id="screen-admin-dash" class="screen hidden">
-            <h2>⚙️ Admin Control Center</h2>
-            <div class="card">
-                <h3>Faculty Approval Queue</h3>
-                <table id="admin-fac-table">
-                    <thead><tr><th>Name</th><th>ID</th><th>Status</th><th>Actions</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+        <div id="screen-admin-dash" class="hidden">
+            <h2>⚙️ Admin Panel</h2>
+            <div class="card"><table id="admin-table"><thead><tr><th>Faculty</th><th>ID</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
         </div>
 
-        <div id="screen-faculty-login" class="screen hidden">
+        <div id="screen-faculty-login" class="hidden">
             <div class="card" style="max-width: 400px; margin: auto;">
                 <h2>Faculty Login</h2>
                 <input type="text" id="facId" placeholder="Faculty ID (FAC001)">
                 <input type="password" id="facPass" placeholder="Password">
-                <button class="btn-teal" style="width: 100%" onclick="login('faculty')">Login</button>
+                <button onclick="login('faculty')" style="width:100%; background:var(--teal)">Login</button>
             </div>
         </div>
-        <div id="screen-faculty-dash" class="screen hidden">
+        <div id="screen-faculty-dash" class="hidden">
             <h2>Faculty Dashboard</h2>
             <div class="card">
-                <h3>🚀 Activate Socratic Session</h3>
-                <input type="text" id="sess-topic" placeholder="Session Topic (e.g. Newton's Law of Cooling)">
-                <textarea id="sess-content" rows="4" placeholder="Enter key facts or manual content for the AI to refer to..."></textarea>
-                <button class="btn-teal" onclick="startSession()">Activate Session</button>
+                <h3>🚀 Set Socratic Context</h3>
+                <input type="text" id="sess-topic" placeholder="e.g. Newton's Law of Cooling">
+                <textarea id="sess-content" rows="6" placeholder="Paste the manual content here. The AI will use these terms to ask questions."></textarea>
+                <button onclick="startSession()" style="background:var(--teal)">Activate Session</button>
                 <p id="sess-status" style="margin-top:10px; font-weight:bold; color:var(--teal)"></p>
             </div>
         </div>
 
-        <div id="screen-student-login" class="screen hidden">
+        <div id="screen-student-login" class="hidden">
             <div class="card" style="max-width: 400px; margin: auto;">
                 <h2>Student Entry</h2>
                 <input type="text" id="stuName" placeholder="Full Name">
                 <input type="text" id="stuRoll" placeholder="Roll Number">
-                <button class="btn-gold" style="width: 100%" onclick="login('student')">Begin Coaching</button>
+                <button onclick="login('student')" style="width:100%">Begin</button>
             </div>
         </div>
-        <div id="screen-student-coach" class="screen hidden">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                <h2 id="stu-topic">Awaiting Session...</h2>
-                <span id="stu-status" style="font-size:0.8rem; background:var(--gold2); color:white; padding:2px 10px; border-radius:10px;">Active</span>
-            </div>
+        <div id="screen-student-coach" class="hidden">
+            <h2 id="stu-topic">Awaiting Session...</h2>
             <div class="chat-box" id="stu-chat"></div>
             <div style="display: flex; gap: 10px;">
-                <input type="text" id="stu-input" placeholder="Explain your reasoning...">
-                <button class="btn-gold" onclick="sendStudentMsg()">Send</button>
+                <input type="text" id="stu-input" placeholder="Explain your thinking...">
+                <button onclick="sendStudentMsg()">Send</button>
             </div>
         </div>
     </div>
@@ -125,32 +101,27 @@
                 if(!localStorage.getItem('spc_faculty')) {
                     localStorage.setItem('spc_faculty', JSON.stringify([{id:'FAC001', name:'Dr. Shiva Math', pass:'faculty123', approved:true}]));
                 }
-                if(!localStorage.getItem('spc_students')) localStorage.setItem('spc_students', '[]');
             },
             get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); },
             save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
         };
 
         function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
             document.getElementById('screen-' + id).classList.remove('hidden');
         }
 
         function login(role) {
             if(role === 'admin') {
                 if(document.getElementById('adminId').value === "ADMIN" && document.getElementById('adminPass').value === "admin@shiva2025") {
-                    showScreen('admin-dash'); updateAdminTable();
-                } else alert("Invalid Admin Access");
+                    showScreen('admin-dash'); updateAdmin();
+                }
             } else if(role === 'faculty') {
                 const f = DB.get('spc_faculty').find(x => x.id === document.getElementById('facId').value && x.pass === document.getElementById('facPass').value);
-                if(f && f.approved) { showScreen('faculty-dash'); } 
-                else alert("Invalid or Unapproved Faculty");
+                if(f && f.approved) showScreen('faculty-dash');
             } else if(role === 'student') {
-                const name = document.getElementById('stuName').value;
-                const roll = document.getElementById('stuRoll').value;
-                if(!name || !roll) return alert("Enter Details");
-                window.currentStu = {name, roll};
-                showScreen('student-coach'); initStudentChat();
+                window.currentStu = { name: document.getElementById('stuName').value, roll: document.getElementById('stuRoll').value };
+                showScreen('student-coach'); initChat();
             }
         }
 
@@ -158,88 +129,64 @@
             const topic = document.getElementById('sess-topic').value;
             const content = document.getElementById('sess-content').value;
             localStorage.setItem('spc_active_session', JSON.stringify({ active: true, topic, content }));
-            document.getElementById('sess-status').innerText = "✅ Session Activated: " + topic;
+            document.getElementById('sess-status').innerText = "✅ Session Live!";
         }
 
-        // --- SOCRATIC LOGIC ENGINE ---
-        function getSocraticResponse(userText) {
-            const input = userText.toLowerCase();
+        // --- CONTENT-AWARE SOCRATIC LOGIC ---
+        function generateResponse(userText) {
             const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
+            const content = sess.content.toLowerCase();
+            const words = content.split(/\W+/).filter(w => w.length > 4); // Find technical words in your manual
             
-            // Logic: Analyze keywords and respond with a probing question
-            if (input.includes("don't know") || input.includes("not sure")) {
-                return "That's okay! Let's break it down. If we look at the core variables in " + sess.topic + ", which one do you think changes first?";
-            }
-            if (input.includes("heat") || input.includes("temperature")) {
-                return "Interesting. How does the transfer of heat affect the equilibrium of the system in this context?";
-            }
-            if (input.includes("increase") || input.includes("more")) {
-                return "If it increases, what does that imply about the relationship between the two main factors we are studying?";
-            }
-            if (input.includes("because") || input.includes("reason")) {
-                return "You've provided a reason, but can we test that theory? What evidence from the lab material supports this?";
-            }
+            // 1. Pick a random technical term from YOUR manual that the student hasn't mentioned
+            const unusedWords = words.filter(w => !userText.toLowerCase().includes(w));
+            const focusWord = unusedWords[Math.floor(Math.random() * unusedWords.length)] || "the process";
+
+            // 2. Adaptive questioning based on student input
+            if (userText.length < 10) return "Could you explain that in a bit more detail? How does it relate to " + focusWord + "?";
             
-            // Default Socratic fallback (Varying the responses)
-            const fallbacks = [
-                "Can you elaborate on why you think that is the case?",
-                "How does that observation align with what we know about " + sess.topic + "?",
-                "What would happen if we changed the initial conditions of our experiment?",
-                "Could you explain that concept as if you were teaching it to a peer?"
+            const prompts = [
+                `That's a start. Now, looking at our manual, how would you define the role of "${focusWord}" in this experiment?`,
+                `If we were to change the parameters of ${focusWord}, what outcome would you expect?`,
+                `Interesting. How does your observation connect to the principle of "${focusWord}" mentioned in the notes?`,
+                `Can you identify a relationship between your last point and "${focusWord}"?`
             ];
-            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+            
+            return prompts[Math.floor(Math.random() * prompts.length)];
         }
 
-        function initStudentChat() {
+        function initChat() {
             const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
             const chat = document.getElementById('stu-chat');
             chat.innerHTML = "";
             if(sess.active) {
                 document.getElementById('stu-topic').innerText = "Coach: " + sess.topic;
-                addChatMsg('coach', `Hello ${window.currentStu.name}. We are exploring ${sess.topic}. Based on your initial understanding, what is the primary goal of this study?`);
-            } else {
-                addChatMsg('coach', "Awaiting faculty to activate the lab session...");
+                addMsg('coach', `Hello ${window.currentStu.name}. We are analyzing ${sess.topic}. Based on the manual provided by Professor Math, what do you think is the first thing we should observe?`);
             }
         }
 
-        function addChatMsg(role, text) {
-            const div = document.createElement('div');
-            div.className = `msg msg-${role}`;
-            div.innerText = text;
-            document.getElementById('stu-chat').appendChild(div);
+        function addMsg(role, text) {
+            const d = document.createElement('div');
+            d.className = `msg msg-${role}`;
+            d.innerText = text;
+            document.getElementById('stu-chat').appendChild(d);
             document.getElementById('stu-chat').scrollTop = document.getElementById('stu-chat').scrollHeight;
         }
 
         function sendStudentMsg() {
             const inp = document.getElementById('stu-input');
-            const userText = inp.value;
-            if(!userText) return;
-            
-            addChatMsg('user', userText);
+            if(!inp.value) return;
+            addMsg('user', inp.value);
+            const reply = generateResponse(inp.value);
             inp.value = "";
-            
-            // Show "Thinking..." effect
-            setTimeout(() => {
-                const response = getSocraticResponse(userText);
-                addChatMsg('coach', response);
-            }, 800);
+            setTimeout(() => addMsg('coach', reply), 800);
         }
 
-        function updateAdminTable() {
-            const tbody = document.querySelector('#admin-fac-table tbody');
-            tbody.innerHTML = DB.get('spc_faculty').map((f, i) => `
-                <tr>
-                    <td>${f.name}</td><td>${f.id}</td>
-                    <td>${f.approved ? 'Approved' : 'Pending'}</td>
-                    <td>
-                        <button onclick="approveFac(${i})">Approve</button>
-                        <button onclick="deleteFac(${i})" style="background:var(--rust); color:white">Delete</button>
-                    </td>
-                </tr>`).join('');
+        function updateAdmin() {
+            const tbody = document.querySelector('#admin-table tbody');
+            tbody.innerHTML = DB.get('spc_faculty').map((f, i) => `<tr><td>${f.name}</td><td>${f.id}</td><td>${f.approved?'Approved':'Pending'}</td><td><button onclick="approve(${i})">Approve</button></td></tr>`).join('');
         }
-
-        function approveFac(i) { let facs = DB.get('spc_faculty'); facs[i].approved = true; DB.save('spc_faculty', facs); updateAdminTable(); }
-        function deleteFac(i) { if(confirm("Delete?")) { let facs = DB.get('spc_faculty'); facs.splice(i, 1); DB.save('spc_faculty', facs); updateAdminTable(); } }
+        function approve(i) { let f = DB.get('spc_faculty'); f[i].approved = true; DB.save('spc_faculty', f); updateAdmin(); }
 
         DB.init();
     </script>
