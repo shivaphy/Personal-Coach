@@ -31,13 +31,11 @@
         
         /* Chat UI */
         .chat-box { height: 400px; overflow-y: auto; border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem; background: #fafafa; margin-bottom: 1rem; display: flex; flex-direction: column; }
-        .msg { margin-bottom: 1rem; padding: 10px 15px; border-radius: 10px; max-width: 80%; }
-        .msg-coach { background: #e6f7f5; color: var(--teal); align-self: flex-start; }
-        .msg-user { background: #fef3dc; color: var(--ink); align-self: flex-end; }
+        .msg { margin-bottom: 1rem; padding: 10px 15px; border-radius: 10px; max-width: 80%; font-size: 0.95rem; line-height: 1.4; }
+        .msg-coach { background: #e6f7f5; color: var(--teal); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg-user { background: #fef3dc; color: var(--ink); align-self: flex-end; border-bottom-right-radius: 2px; }
         
-        /* Upload Styling */
-        .upload-area { border: 2px dashed var(--border); padding: 1.5rem; text-align: center; border-radius: 8px; margin: 10px 0; background: var(--cream); cursor: pointer; }
-        .upload-area:hover { border-color: var(--teal); }
+        /* Table */
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
         th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
     </style>
@@ -51,9 +49,9 @@
 
     <div class="container">
         <div id="screen-home" class="screen">
-            <div style="text-align: center; padding: 3rem 0;">
-                <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Welcome, Professor Math</h2>
-                <p style="color:var(--ink3)">Authorized Personnel: Dr. Shivakumar Math</p>
+            <div style="text-align: center; padding: 2rem 0;">
+                <h2 style="font-family: 'Playfair Display'; font-size: 2.2rem;">Socratic Physics Coaching</h2>
+                <p style="color:var(--ink3); margin-top: 10px;">Managed by Dr. Shivakumar Math</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
                     <div class="card" onclick="showScreen('student-login')" style="cursor:pointer"><h3>🎓 Student Portal</h3></div>
                     <div class="card" onclick="showScreen('faculty-login')" style="cursor:pointer"><h3>👨‍🏫 Faculty Portal</h3></div>
@@ -70,11 +68,10 @@
                 <button class="btn-gold" style="width: 100%" onclick="login('admin')">Login</button>
             </div>
         </div>
-
         <div id="screen-admin-dash" class="screen hidden">
             <h2>⚙️ Admin Control Center</h2>
             <div class="card">
-                <h3>Faculty Approval & Management</h3>
+                <h3>Faculty Approval Queue</h3>
                 <table id="admin-fac-table">
                     <thead><tr><th>Name</th><th>ID</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody></tbody>
@@ -90,20 +87,12 @@
                 <button class="btn-teal" style="width: 100%" onclick="login('faculty')">Login</button>
             </div>
         </div>
-
         <div id="screen-faculty-dash" class="screen hidden">
             <h2>Faculty Dashboard</h2>
             <div class="card">
-                <h3>🚀 Activate Student Session</h3>
-                <input type="text" id="sess-topic" placeholder="Session Topic (e.g. Fermi Energy of Copper)">
-                
-                <label>Upload Study Material (Text/Manual):</label>
-                <div class="upload-area" onclick="document.getElementById('file-upload').click()">
-                    <p id="file-label">Click to upload study material</p>
-                    <input type="file" id="file-upload" hidden onchange="handleFileUpload(event)">
-                </div>
-                
-                <textarea id="sess-content" rows="4" placeholder="Or paste content manually here..."></textarea>
+                <h3>🚀 Activate Socratic Session</h3>
+                <input type="text" id="sess-topic" placeholder="Session Topic (e.g. Newton's Law of Cooling)">
+                <textarea id="sess-content" rows="4" placeholder="Enter key facts or manual content for the AI to refer to..."></textarea>
                 <button class="btn-teal" onclick="startSession()">Activate Session</button>
                 <p id="sess-status" style="margin-top:10px; font-weight:bold; color:var(--teal)"></p>
             </div>
@@ -117,26 +106,26 @@
                 <button class="btn-gold" style="width: 100%" onclick="login('student')">Begin Coaching</button>
             </div>
         </div>
-
         <div id="screen-student-coach" class="screen hidden">
-            <h2 id="stu-topic">Awaiting Session...</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h2 id="stu-topic">Awaiting Session...</h2>
+                <span id="stu-status" style="font-size:0.8rem; background:var(--gold2); color:white; padding:2px 10px; border-radius:10px;">Active</span>
+            </div>
             <div class="chat-box" id="stu-chat"></div>
             <div style="display: flex; gap: 10px;">
-                <input type="text" id="stu-input" placeholder="Your answer...">
+                <input type="text" id="stu-input" placeholder="Explain your reasoning...">
                 <button class="btn-gold" onclick="sendStudentMsg()">Send</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- DATABASE INITIALIZATION ---
         const DB = {
             init() {
                 if(!localStorage.getItem('spc_faculty')) {
                     localStorage.setItem('spc_faculty', JSON.stringify([{id:'FAC001', name:'Dr. Shiva Math', pass:'faculty123', approved:true}]));
                 }
                 if(!localStorage.getItem('spc_students')) localStorage.setItem('spc_students', '[]');
-                if(!localStorage.getItem('spc_activity')) localStorage.setItem('spc_activity', '{}');
             },
             get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); },
             save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
@@ -147,102 +136,69 @@
             document.getElementById('screen-' + id).classList.remove('hidden');
         }
 
-        // --- FILE UPLOAD LOGIC ---
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('sess-content').value = e.target.result;
-                document.getElementById('file-label').innerText = "✅ Loaded: " + file.name;
-            };
-            reader.readAsText(file);
-        }
-
-        // --- AUTH & SESSION LOGIC ---
         function login(role) {
             if(role === 'admin') {
-                const id = document.getElementById('adminId').value;
-                const pass = document.getElementById('adminPass').value;
-                if(id === "ADMIN" && pass === "admin@shiva2025") {
+                if(document.getElementById('adminId').value === "ADMIN" && document.getElementById('adminPass').value === "admin@shiva2025") {
                     showScreen('admin-dash'); updateAdminTable();
-                } else alert("Invalid Admin Credentials");
+                } else alert("Invalid Admin Access");
             } else if(role === 'faculty') {
-                const id = document.getElementById('facId').value;
-                const pass = document.getElementById('facPass').value;
-                const f = DB.get('spc_faculty').find(x => x.id === id && x.pass === pass);
-                if(f && f.approved) { window.currentFac = f; showScreen('faculty-dash'); } 
-                else alert(f ? "Pending Approval" : "Invalid Credentials");
+                const f = DB.get('spc_faculty').find(x => x.id === document.getElementById('facId').value && x.pass === document.getElementById('facPass').value);
+                if(f && f.approved) { showScreen('faculty-dash'); } 
+                else alert("Invalid or Unapproved Faculty");
             } else if(role === 'student') {
                 const name = document.getElementById('stuName').value;
                 const roll = document.getElementById('stuRoll').value;
-                if(!name || !roll) return alert("Fill Name and Roll No");
-                
-                let students = DB.get('spc_students');
-                let s = students.find(x => x.roll === roll);
-                if(!s) {
-                    s = {name, roll};
-                    students.push(s);
-                    DB.save('spc_students', students);
-                }
-                window.currentStu = s;
+                if(!name || !roll) return alert("Enter Details");
+                window.currentStu = {name, roll};
                 showScreen('student-coach'); initStudentChat();
             }
         }
 
-        // --- ADMIN FEATURES ---
-        function updateAdminTable() {
-            const facs = DB.get('spc_faculty');
-            const tbody = document.querySelector('#admin-fac-table tbody');
-            tbody.innerHTML = facs.map((f, i) => `
-                <tr>
-                    <td>${f.name}</td><td>${f.id}</td>
-                    <td>${f.approved ? '✅ Approved' : '⏳ Pending'}</td>
-                    <td>
-                        <div style="display:flex; gap:5px;">
-                            ${!f.approved ? `<button class="btn-teal" style="padding:5px" onclick="approveFac(${i})">Approve</button>` : ''}
-                            <button class="btn-rust" style="padding:5px; background:var(--rust)" onclick="deleteFac(${i})">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function approveFac(index) {
-            let facs = DB.get('spc_faculty');
-            facs[index].approved = true;
-            DB.save('spc_faculty', facs);
-            updateAdminTable();
-        }
-
-        function deleteFac(index) {
-            if (confirm("Permanently delete this faculty member?")) {
-                let facs = DB.get('spc_faculty');
-                facs.splice(index, 1);
-                DB.save('spc_faculty', facs);
-                updateAdminTable();
-            }
-        }
-
-        // --- FACULTY FEATURES ---
         function startSession() {
             const topic = document.getElementById('sess-topic').value;
             const content = document.getElementById('sess-content').value;
-            if(!topic || !content) return alert("Provide topic and content");
             localStorage.setItem('spc_active_session', JSON.stringify({ active: true, topic, content }));
-            document.getElementById('sess-status').innerText = "✅ Session Live: " + topic;
+            document.getElementById('sess-status').innerText = "✅ Session Activated: " + topic;
         }
 
-        // --- STUDENT FEATURES ---
+        // --- SOCRATIC LOGIC ENGINE ---
+        function getSocraticResponse(userText) {
+            const input = userText.toLowerCase();
+            const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
+            
+            // Logic: Analyze keywords and respond with a probing question
+            if (input.includes("don't know") || input.includes("not sure")) {
+                return "That's okay! Let's break it down. If we look at the core variables in " + sess.topic + ", which one do you think changes first?";
+            }
+            if (input.includes("heat") || input.includes("temperature")) {
+                return "Interesting. How does the transfer of heat affect the equilibrium of the system in this context?";
+            }
+            if (input.includes("increase") || input.includes("more")) {
+                return "If it increases, what does that imply about the relationship between the two main factors we are studying?";
+            }
+            if (input.includes("because") || input.includes("reason")) {
+                return "You've provided a reason, but can we test that theory? What evidence from the lab material supports this?";
+            }
+            
+            // Default Socratic fallback (Varying the responses)
+            const fallbacks = [
+                "Can you elaborate on why you think that is the case?",
+                "How does that observation align with what we know about " + sess.topic + "?",
+                "What would happen if we changed the initial conditions of our experiment?",
+                "Could you explain that concept as if you were teaching it to a peer?"
+            ];
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
         function initStudentChat() {
             const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
             const chat = document.getElementById('stu-chat');
             chat.innerHTML = "";
             if(sess.active) {
-                document.getElementById('stu-topic').innerText = "Topic: " + sess.topic;
-                addChatMsg('coach', `Hello ${window.currentStu.name}! Based on Professor Math's material, let's explore ${sess.topic}. What is your first observation?`);
+                document.getElementById('stu-topic').innerText = "Coach: " + sess.topic;
+                addChatMsg('coach', `Hello ${window.currentStu.name}. We are exploring ${sess.topic}. Based on your initial understanding, what is the primary goal of this study?`);
             } else {
-                addChatMsg('coach', "Awaiting session activation from faculty...");
+                addChatMsg('coach', "Awaiting faculty to activate the lab session...");
             }
         }
 
@@ -256,18 +212,34 @@
 
         function sendStudentMsg() {
             const inp = document.getElementById('stu-input');
-            if(!inp.value) return;
-            addChatMsg('user', inp.value);
+            const userText = inp.value;
+            if(!userText) return;
             
-            // Log activity
-            const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
-            let acts = JSON.parse(localStorage.getItem('spc_activity') || '{}');
-            acts[window.currentStu.roll] = { latest: { topic: sess.topic, exchanges: 1, mastery: 'Developing' } };
-            localStorage.setItem('spc_activity', JSON.stringify(acts));
-
+            addChatMsg('user', userText);
             inp.value = "";
-            setTimeout(() => addChatMsg('coach', "That's a good point. How does that connect to the core theory?"), 1000);
+            
+            // Show "Thinking..." effect
+            setTimeout(() => {
+                const response = getSocraticResponse(userText);
+                addChatMsg('coach', response);
+            }, 800);
         }
+
+        function updateAdminTable() {
+            const tbody = document.querySelector('#admin-fac-table tbody');
+            tbody.innerHTML = DB.get('spc_faculty').map((f, i) => `
+                <tr>
+                    <td>${f.name}</td><td>${f.id}</td>
+                    <td>${f.approved ? 'Approved' : 'Pending'}</td>
+                    <td>
+                        <button onclick="approveFac(${i})">Approve</button>
+                        <button onclick="deleteFac(${i})" style="background:var(--rust); color:white">Delete</button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function approveFac(i) { let facs = DB.get('spc_faculty'); facs[i].approved = true; DB.save('spc_faculty', facs); updateAdminTable(); }
+        function deleteFac(i) { if(confirm("Delete?")) { let facs = DB.get('spc_faculty'); facs.splice(i, 1); DB.save('spc_faculty', facs); updateAdminTable(); } }
 
         DB.init();
     </script>
