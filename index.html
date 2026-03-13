@@ -1,56 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shiva's Personal Coach — Platform Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{--cr:#fdf8f0;--go:#c47f17;--go2:#e8a020;--gl:#fef3dc;--tl:#1a7a6e;--tl2:#22a090;--tlL:#e6f7f5;--ink:#1c160f;--i3:#6b5d4a;--bd:#ddd4c0;--sh:rgba(60,40,10,.12);}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--cr);color:var(--ink);min-height:100vh;
-  background-image:radial-gradient(ellipse at 10% 10%,rgba(196,127,23,.1),transparent 50%),radial-gradient(ellipse at 90% 90%,rgba(26,122,110,.08),transparent 50%)}
-.hero{text-align:center;padding:5rem 2rem 3rem}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.5rem);color:var(--go);line-height:1.15}
-.hero h1 em{font-style:italic}
-.hero .sub{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--i3);margin-top:.55rem}
-.hero p{margin-top:1rem;color:var(--i3);font-size:.96rem;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.75}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;max-width:880px;margin:0 auto;padding:0 2rem 4rem}
-.card{background:#fff;border:2px solid var(--bd);border-radius:16px;padding:2.2rem;text-align:center;cursor:pointer;transition:all .25s;box-shadow:0 4px 20px var(--sh);text-decoration:none;color:inherit;display:block}
-.card:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(60,40,10,.18);border-color:var(--go)}
-.card-ico{font-size:3rem;margin-bottom:1rem;display:block}
-.card h2{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--ink);margin-bottom:.6rem}
-.card p{font-size:.85rem;color:var(--i3);line-height:1.65}
-.card .bdg{display:inline-block;margin-top:1rem;background:var(--gl);border:1px solid var(--go2);color:var(--go);border-radius:20px;padding:.25rem .95rem;font-size:.74rem;font-weight:700;letter-spacing:.06em}
-.card.tl:hover{border-color:var(--tl2)}.card.tl .bdg{background:var(--tlL);border-color:var(--tl2);color:var(--tl)}
-footer{text-align:center;padding:1.5rem;font-size:.77rem;color:var(--i3);border-top:1px solid var(--bd)}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiva's Coach — Unified Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #fdf8f0; --cream2: #f5ede0; --ink: #1c160f; --ink3: #6b5d4a;
+            --gold: #c47f17; --gold2: #e8a020; --teal: #1a7a6e; --rust: #b5402a;
+            --border: #ddd4c0; --shadow: rgba(60,40,10,.12);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.6; }
+        .hidden { display: none !important; }
+        
+        /* Layout */
+        .header { background: white; padding: 1rem 2rem; border-bottom: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 20px var(--shadow); margin-bottom: 2rem; }
+        
+        /* Forms & Buttons */
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; }
+        button { padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-family: inherit; }
+        .btn-gold { background: var(--gold); color: white; }
+        .btn-teal { background: var(--teal); color: white; }
+        .btn-rust { background: var(--rust); color: white; }
+        .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--ink3); }
+        
+        /* Chat UI */
+        .chat-box { height: 400px; overflow-y: auto; border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem; background: #fafafa; margin-bottom: 1rem; display: flex; flex-direction: column; }
+        .msg { margin-bottom: 1rem; padding: 10px 15px; border-radius: 10px; max-width: 80%; }
+        .msg-coach { background: #e6f7f5; color: var(--teal); align-self: flex-start; }
+        .msg-user { background: #fef3dc; color: var(--ink); align-self: flex-end; }
+        
+        /* Upload Styling */
+        .upload-area { border: 2px dashed var(--border); padding: 1.5rem; text-align: center; border-radius: 8px; margin: 10px 0; background: var(--cream); cursor: pointer; }
+        .upload-area:hover { border-color: var(--teal); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+    </style>
 </head>
 <body>
-<div class="hero">
-  <h1>Shiva's <em>Personal</em> Coach</h1>
-  <div class="sub">Socratic · Adaptive · AI-Powered Education Platform</div>
-  <p>A complete intelligent learning environment — Socratic coaching, AI grading, lesson planning, quiz &amp; question paper generation, CO-PO mapping, and more.</p>
-</div>
-<div class="cards">
-  <a class="card" href="student.html">
-    <span class="card-ico">🎓</span>
-    <h2>Student Portal</h2>
-    <p>Enter your personalized Socratic coaching session, upload assignments for AI grading, and track your progress with live performance charts.</p>
-    <span class="bdg">STUDENT LOGIN</span>
-  </a>
-  <a class="card tl" href="faculty.html">
-    <span class="card-ico">👨‍🏫</span>
-    <h2>Faculty Portal</h2>
-    <p>Manage sessions, upload documents, generate lesson plans, quizzes, question papers, monitor students live, and manage CO-PO mappings.</p>
-    <span class="bdg">FACULTY LOGIN</span>
-  </a>
-  <a class="card tl" href="admin.html">
-    <span class="card-ico">⚙️</span>
-    <h2>Admin Panel</h2>
-    <p>Approve faculty registrations, manage all credentials, add students, handle password resets, and monitor full platform activity.</p>
-    <span class="bdg">ADMIN ACCESS</span>
-  </a>
-</div>
-<footer>Shiva's Personal Coach © 2025 · Built with Socratic Intelligence · Owner: shivuphy@gmail.com</footer>
+
+    <header class="header">
+        <h1>🎓 Shiva's Coach</h1>
+        <button class="btn-outline" onclick="showScreen('home')">Home</button>
+    </header>
+
+    <div class="container">
+        <div id="screen-home" class="screen">
+            <div style="text-align: center; padding: 3rem 0;">
+                <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Welcome, Professor Math</h2>
+                <p style="color:var(--ink3)">Authorized Personnel: Dr. Shivakumar Math</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div class="card" onclick="showScreen('student-login')" style="cursor:pointer"><h3>🎓 Student Portal</h3></div>
+                    <div class="card" onclick="showScreen('faculty-login')" style="cursor:pointer"><h3>👨‍🏫 Faculty Portal</h3></div>
+                    <div class="card" onclick="showScreen('admin-login')" style="cursor:pointer"><h3>⚙️ Admin Panel</h3></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-admin-login" class="screen hidden">
+            <div class="card" style="max-width: 400px; margin: auto;">
+                <h2>Admin Login</h2>
+                <input type="text" id="adminId" placeholder="Admin ID">
+                <input type="password" id="adminPass" placeholder="Password">
+                <button class="btn-gold" style="width: 100%" onclick="login('admin')">Login</button>
+            </div>
+        </div>
+
+        <div id="screen-admin-dash" class="screen hidden">
+            <h2>⚙️ Admin Control Center</h2>
+            <div class="card">
+                <h3>Faculty Approval & Management</h3>
+                <table id="admin-fac-table">
+                    <thead><tr><th>Name</th><th>ID</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="screen-faculty-login" class="screen hidden">
+            <div class="card" style="max-width: 400px; margin: auto;">
+                <h2>Faculty Login</h2>
+                <input type="text" id="facId" placeholder="Faculty ID (FAC001)">
+                <input type="password" id="facPass" placeholder="Password">
+                <button class="btn-teal" style="width: 100%" onclick="login('faculty')">Login</button>
+            </div>
+        </div>
+
+        <div id="screen-faculty-dash" class="screen hidden">
+            <h2>Faculty Dashboard</h2>
+            <div class="card">
+                <h3>🚀 Activate Student Session</h3>
+                <input type="text" id="sess-topic" placeholder="Session Topic (e.g. Fermi Energy of Copper)">
+                
+                <label>Upload Study Material (Text/Manual):</label>
+                <div class="upload-area" onclick="document.getElementById('file-upload').click()">
+                    <p id="file-label">Click to upload study material</p>
+                    <input type="file" id="file-upload" hidden onchange="handleFileUpload(event)">
+                </div>
+                
+                <textarea id="sess-content" rows="4" placeholder="Or paste content manually here..."></textarea>
+                <button class="btn-teal" onclick="startSession()">Activate Session</button>
+                <p id="sess-status" style="margin-top:10px; font-weight:bold; color:var(--teal)"></p>
+            </div>
+        </div>
+
+        <div id="screen-student-login" class="screen hidden">
+            <div class="card" style="max-width: 400px; margin: auto;">
+                <h2>Student Entry</h2>
+                <input type="text" id="stuName" placeholder="Full Name">
+                <input type="text" id="stuRoll" placeholder="Roll Number">
+                <button class="btn-gold" style="width: 100%" onclick="login('student')">Begin Coaching</button>
+            </div>
+        </div>
+
+        <div id="screen-student-coach" class="screen hidden">
+            <h2 id="stu-topic">Awaiting Session...</h2>
+            <div class="chat-box" id="stu-chat"></div>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="stu-input" placeholder="Your answer...">
+                <button class="btn-gold" onclick="sendStudentMsg()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATABASE INITIALIZATION ---
+        const DB = {
+            init() {
+                if(!localStorage.getItem('spc_faculty')) {
+                    localStorage.setItem('spc_faculty', JSON.stringify([{id:'FAC001', name:'Dr. Shiva Math', pass:'faculty123', approved:true}]));
+                }
+                if(!localStorage.getItem('spc_students')) localStorage.setItem('spc_students', '[]');
+                if(!localStorage.getItem('spc_activity')) localStorage.setItem('spc_activity', '{}');
+            },
+            get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); },
+            save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById('screen-' + id).classList.remove('hidden');
+        }
+
+        // --- FILE UPLOAD LOGIC ---
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('sess-content').value = e.target.result;
+                document.getElementById('file-label').innerText = "✅ Loaded: " + file.name;
+            };
+            reader.readAsText(file);
+        }
+
+        // --- AUTH & SESSION LOGIC ---
+        function login(role) {
+            if(role === 'admin') {
+                const id = document.getElementById('adminId').value;
+                const pass = document.getElementById('adminPass').value;
+                if(id === "ADMIN" && pass === "admin@shiva2025") {
+                    showScreen('admin-dash'); updateAdminTable();
+                } else alert("Invalid Admin Credentials");
+            } else if(role === 'faculty') {
+                const id = document.getElementById('facId').value;
+                const pass = document.getElementById('facPass').value;
+                const f = DB.get('spc_faculty').find(x => x.id === id && x.pass === pass);
+                if(f && f.approved) { window.currentFac = f; showScreen('faculty-dash'); } 
+                else alert(f ? "Pending Approval" : "Invalid Credentials");
+            } else if(role === 'student') {
+                const name = document.getElementById('stuName').value;
+                const roll = document.getElementById('stuRoll').value;
+                if(!name || !roll) return alert("Fill Name and Roll No");
+                
+                let students = DB.get('spc_students');
+                let s = students.find(x => x.roll === roll);
+                if(!s) {
+                    s = {name, roll};
+                    students.push(s);
+                    DB.save('spc_students', students);
+                }
+                window.currentStu = s;
+                showScreen('student-coach'); initStudentChat();
+            }
+        }
+
+        // --- ADMIN FEATURES ---
+        function updateAdminTable() {
+            const facs = DB.get('spc_faculty');
+            const tbody = document.querySelector('#admin-fac-table tbody');
+            tbody.innerHTML = facs.map((f, i) => `
+                <tr>
+                    <td>${f.name}</td><td>${f.id}</td>
+                    <td>${f.approved ? '✅ Approved' : '⏳ Pending'}</td>
+                    <td>
+                        <div style="display:flex; gap:5px;">
+                            ${!f.approved ? `<button class="btn-teal" style="padding:5px" onclick="approveFac(${i})">Approve</button>` : ''}
+                            <button class="btn-rust" style="padding:5px; background:var(--rust)" onclick="deleteFac(${i})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function approveFac(index) {
+            let facs = DB.get('spc_faculty');
+            facs[index].approved = true;
+            DB.save('spc_faculty', facs);
+            updateAdminTable();
+        }
+
+        function deleteFac(index) {
+            if (confirm("Permanently delete this faculty member?")) {
+                let facs = DB.get('spc_faculty');
+                facs.splice(index, 1);
+                DB.save('spc_faculty', facs);
+                updateAdminTable();
+            }
+        }
+
+        // --- FACULTY FEATURES ---
+        function startSession() {
+            const topic = document.getElementById('sess-topic').value;
+            const content = document.getElementById('sess-content').value;
+            if(!topic || !content) return alert("Provide topic and content");
+            localStorage.setItem('spc_active_session', JSON.stringify({ active: true, topic, content }));
+            document.getElementById('sess-status').innerText = "✅ Session Live: " + topic;
+        }
+
+        // --- STUDENT FEATURES ---
+        function initStudentChat() {
+            const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
+            const chat = document.getElementById('stu-chat');
+            chat.innerHTML = "";
+            if(sess.active) {
+                document.getElementById('stu-topic').innerText = "Topic: " + sess.topic;
+                addChatMsg('coach', `Hello ${window.currentStu.name}! Based on Professor Math's material, let's explore ${sess.topic}. What is your first observation?`);
+            } else {
+                addChatMsg('coach', "Awaiting session activation from faculty...");
+            }
+        }
+
+        function addChatMsg(role, text) {
+            const div = document.createElement('div');
+            div.className = `msg msg-${role}`;
+            div.innerText = text;
+            document.getElementById('stu-chat').appendChild(div);
+            document.getElementById('stu-chat').scrollTop = document.getElementById('stu-chat').scrollHeight;
+        }
+
+        function sendStudentMsg() {
+            const inp = document.getElementById('stu-input');
+            if(!inp.value) return;
+            addChatMsg('user', inp.value);
+            
+            // Log activity
+            const sess = JSON.parse(localStorage.getItem('spc_active_session') || '{}');
+            let acts = JSON.parse(localStorage.getItem('spc_activity') || '{}');
+            acts[window.currentStu.roll] = { latest: { topic: sess.topic, exchanges: 1, mastery: 'Developing' } };
+            localStorage.setItem('spc_activity', JSON.stringify(acts));
+
+            inp.value = "";
+            setTimeout(() => addChatMsg('coach', "That's a good point. How does that connect to the core theory?"), 1000);
+        }
+
+        DB.init();
+    </script>
 </body>
 </html>
